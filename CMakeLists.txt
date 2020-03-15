@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.9)
-project(cpp_ci_pipeline)
+project(cpp-ci-pipeline)
 
 set(CMAKE_CXX_STANDARD 14)
 
