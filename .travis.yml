@@ -6,3 +6,4 @@ compiler:
 script:
   - cmake .
   - make
+  - ./cpp_ci_pipeline
