@@ -3,7 +3,23 @@ language: cpp
 compiler:
   - gcc
 
+dist:  trusty
+
+addons:
+  sonarcloud:
+    organization: "josemendozamata"
+    token:
+      secure: "PzkGNJgfY2yV6lWtyW1aIZWS3AUUen/anrbk01q1tyEtg+TjoHXBzZ6vWPSw/7VVH9ro6UK3niOSewuKgs8e1dfiD2fnu9q1f9uJvFXmsYPi1TZyy0MCru8qNzF2X1Ma3ozv4Zxx+lvEyxWAPBdLj/cBrQSq4L853q1GG3g4ufw24/5ohScECOgVxU5/FjWJJSIIKELTX8xeWe39pjhrQ8f7Gl2RGn005CVX8+MeXempV/02aL9BOap8dPRcM4oQHxE6cdTsCjVuOr/uqBJ//yRaDwA8cMo6anF24IAkJsGqFejbVnUh5uYAVDO6Cm22jALPM1AZfKZ8OwJ5oSpOv0EOUIlDoI5wQ4Lt1gzqAjQ6TEvQ9T/XMjT8qC46bpfDfeyZhmIiLIh/XcfVNAlsOaZaW2gVhXlNxmGL0ugqMSqyZlJM/64Vd4QdF3eTKxOO1U+56Npu9rCsNR+ccl8OnVzwZm/XtG7fusUdHIEgsb3YT5Bvr+Ay4SmqizsMlnbRADdrPpCFx0N4Rv7n09ief/s/9cg7IBSHa1jnlRtj6/5gVuGJag/oLA3GfmUF01WYAIU8oKGd8ygc0ev9X76CKF3TzLVLBGUKQNQTS3lpLlNywbeWTchEkZUH2N7c2b0vAxHXRtRh+DubRtvlkrW2KpNYhC2dfJrWAEJ+jcBH1Tc=" # encrypted value of your token
+
 script:
   - cmake .
   - make
   - ./cpp_ci_pipeline
+  # Wraps the compilation with the Build Wrapper to generate configuration (used
+  # later by the SonarScanner) into the "bw-output" folder
+  - build-wrapper-linux-x86-64 --out-dir bw-output cmake --build build/
+  # And finally run the SonarCloud analysis - read the "sonar-project.properties"
+  # file to see the specific configuration
+  - sonar-scanner -Dsonar.cfamily.build-wrapper-output=bw-output
+
+
